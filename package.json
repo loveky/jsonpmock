@@ -1,0 +1,18 @@
+{
+  "name": "jsonpmock",
+  "version": "0.0.1",
+  "description": "A simple jsonp API mock plateform",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "jsonp",
+    "mock"
+  ],
+  "author": "loveky <ylzcylx@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "koa": "^1.1.2"
+  }
+}
