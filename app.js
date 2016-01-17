@@ -2,6 +2,7 @@
 
 const app = require('koa')();
 const render = require('koa-ejs');
+const charset = require('koa-charset');
 const path = require('path');
 
 const router = require('./router');
@@ -12,6 +13,7 @@ render(app, {
 	cache: false
 });
 
+app.use(charset());
 app.use(router.routes());
 app.use(router.allowedMethods());
 

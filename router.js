@@ -46,6 +46,8 @@ router
 			yield redis.incr('totalMockRequests');
 
 			this.body = [callbackName, '(', mockConfig.content, ')'].join('');
+			this.type = 'application/json;'
+			this.charset = mockConfig.charset;
 		}
 		else {
 			this.code = 404;
