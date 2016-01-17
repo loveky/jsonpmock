@@ -7,7 +7,7 @@ router
 		yield this.render('index');
 	})
 	.post('/', function * (next) {
-		// Create a new mock
+		this.body = {success: true};
 	})
 	.get('/:id', function * (next) {
 

@@ -56,7 +56,7 @@
 			</div>
 			<div class="form-group">
 				<div class="col-sm-offset-2 col-sm-10">
-					<button type="submit" class="btn btn-success">Mock it!</button>
+					<button id="create" type="submit" class="btn btn-success">Mock it !</button>
 				</div>
 			</div>
 		</form>
@@ -66,9 +66,20 @@
 		var editor = ace.edit("json");
 	    editor.setTheme("ace/theme/monokai")
 	    editor.setFontSize(14);		
-	    editor.getSession()
-	    	.setMode("ace/mode/json")
-	    	.setTabSize(4);
+	    editor.getSession().setMode("ace/mode/json");
+	    editor.getSession().setTabSize(4);
+
+
+	    $('#create').on('click', function (event) {
+	    	event.preventDefault();
+	    	$.post('/', {
+	    		charset: $('#inputCharset').val(),
+	    		delay: $('#inputResponseDelay').val(),
+	    		content: editor.getValue()
+	    	}, 'json').then(function (response) {
+	    		console.log(response);
+	    	});
+	    });
 	</script>
 </body>
 </html>
