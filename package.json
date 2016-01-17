@@ -16,7 +16,9 @@
   "dependencies": {
     "ioredis": "^1.14.0",
     "koa": "^1.1.2",
+    "koa-body": "^1.4.0",
     "koa-ejs": "^3.0.0",
-    "koa-router": "^5.3.0"
+    "koa-router": "^5.3.0",
+    "md5": "^2.0.0"
   }
 }
