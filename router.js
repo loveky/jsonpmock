@@ -15,9 +15,9 @@ router
 		let key = md5(mockString);
 		yield redis.hmset('jsonmock', key, mockString);
 		yield redis.incr('totalMockCreated');
-		this.body = {key: key};
+		this.body = {path: router.url('mock', key)};
 	})
-	.get('/:id', function * (next) {
+	.get('mock', '/:key', function * (next) {
 
 	});
 
