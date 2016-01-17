@@ -18,7 +18,12 @@ function delay (timeInMS) {
 
 router
 	.get('/', function * (next) {
-		yield this.render('index');
+		let totalMockCreated = yield redis.get('totalMockCreated');
+		let totalMockRequests = yield redis.get('totalMockRequests');
+		yield this.render('index', {
+			totalMockCreated: totalMockCreated,
+			totalMockRequests: totalMockRequests
+		});
 	})
 	.post('/', koaBody, function * (next) {
 		let mockConfig = JSON.stringify(this.request.body);
