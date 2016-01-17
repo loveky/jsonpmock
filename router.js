@@ -6,19 +6,45 @@ const koaBody = require('koa-body')();
 const redis = require('./redis');
 
 
+function delay (timeInMS) {
+	timeInMS = Number(timeInMS);
+
+	return new Promise (function (resolve, reject) {
+		setTimeout(function () {
+			resolve();
+		}, timeInMS);
+	});
+}
+
 router
 	.get('/', function * (next) {
 		yield this.render('index');
 	})
 	.post('/', koaBody, function * (next) {
-		let mockString = JSON.stringify(this.request.body);
-		let key = md5(mockString);
-		yield redis.hmset('jsonmock', key, mockString);
+		let mockConfig = JSON.stringify(this.request.body);
+		let key = md5(mockConfig);
+		yield redis.hmset('jsonmock', key, mockConfig);
 		yield redis.incr('totalMockCreated');
 		this.body = {path: router.url('mock', key)};
 	})
 	.get('mock', '/:key', function * (next) {
+		let key = this.params.key;
+		let mockConfig = (yield redis.hmget('jsonmock', key))[0];
+		let callbackName = this.request.query.callback;
+		if (mockConfig && callbackName) {
+			mockConfig = JSON.parse(mockConfig);
 
+			if (mockConfig.delay > 0) {
+				yield delay(mockConfig.delay);
+			}
+
+			yield redis.incr('totalMockRequests');
+
+			this.body = [callbackName, '(', mockConfig.content, ')'].join('');
+		}
+		else {
+			this.code = 404;
+		}
 	});
 
 module.exports = router;
