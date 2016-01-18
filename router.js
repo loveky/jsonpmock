@@ -16,6 +16,26 @@ function delay (timeInMS) {
 	});
 }
 
+function toNumber(string, min, max) {
+	string += '';
+	if (string.match(/^\s*\d+\s*$/)) {
+		var value = parseInt(string, 10);
+		
+		if (value < min) {
+			value = min;
+		}
+
+		if (value > max) {
+			value = max;
+		}
+
+		return value;
+	}
+	else {
+		return min;
+	}
+}
+
 router
 	.get('/', function * (next) {
 		let totalMockCreated = yield redis.get('totalMockCreated');
@@ -26,11 +46,21 @@ router
 		});
 	})
 	.post('/', koaBody, function * (next) {
-		let mockConfig = JSON.stringify(this.request.body);
-		let key = md5(mockConfig);
-		yield redis.hmset('jsonmock', key, mockConfig);
-		yield redis.incr('totalMockCreated');
-		this.body = {path: router.url('mock', key)};
+		let body = this.request.body;
+		body.content = $.trim(body.content);
+		if (body.content.length > 200000) {
+			this.code = 500;
+			this.body = 'Mock data is limited to 200KB';
+		}
+		else {
+			body.delay = toNumber(body.delay, 0, 10000)
+			let mockConfig = JSON.stringify(body);
+			let key = md5(mockConfig);
+			yield redis.hmset('jsonmock', key, mockConfig);
+			yield redis.incr('totalMockCreated');
+			this.body = {path: router.url('mock', key)};
+		}
+
 	})
 	.get('mock', '/:key', function * (next) {
 		let key = this.params.key;
