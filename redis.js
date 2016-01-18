@@ -1,8 +1,8 @@
 'use strict';
 
 const Redis = require('ioredis');
+const config = require('config');
 
-// TODO: read connection info per environment
-let redis = new Redis();
+let redis = new Redis(config.get('redis'));
 
 module.exports = redis;

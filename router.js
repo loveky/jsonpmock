@@ -47,7 +47,7 @@ router
 	})
 	.post('/', koaBody, function * (next) {
 		let body = this.request.body;
-		body.content = $.trim(body.content);
+		body.content = body.content.trim();
 		if (body.content.length > 200000) {
 			this.code = 500;
 			this.body = 'Mock data is limited to 200KB';
