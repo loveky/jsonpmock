@@ -4,6 +4,7 @@ const app = require('koa')();
 const render = require('koa-ejs');
 const charset = require('koa-charset');
 const path = require('path');
+const config = require('config');
 
 const router = require('./router');
 
@@ -17,5 +18,5 @@ app.use(charset());
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-app.listen(3000);
-console.log('Server running at port 3000...');
+app.listen(config.get('port'));
+console.log(`Server running at port ${config.get('port')}...`);

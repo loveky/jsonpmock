@@ -4,5 +4,6 @@
 		"port": 6379,
 		"password": "auth",
 		"keyPrefix": "jsonp-mock-production:"
-	} 
+	},
+	"port": 3000
 }
