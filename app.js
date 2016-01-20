@@ -18,5 +18,4 @@ app.use(charset());
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-app.listen(config.get('port'));
-console.log(`Server running at port ${config.get('port')}...`);
+module.exports = app;
