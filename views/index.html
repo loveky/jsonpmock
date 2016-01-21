@@ -9,6 +9,7 @@
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.2/ace.js"></script>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.2/mode-json.js"></script>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.2/theme-monokai.js"></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.5/clipboard.min.js"></script>
 	<style type="text/css">
 		body {
 			padding: 70px 0 30px;
@@ -30,6 +31,13 @@
 			text-decoration: line-through;
 		}
 
+		#newMockURL {
+			width: 450px;
+		}
+
+		#copy {
+			cursor: pointer;
+		}
 	</style>
 </head>
 <body>
@@ -78,7 +86,7 @@
 		</form>
 	</div>
 
-	<div id="mockCreated" class="modal fade" tabindex="-1" role="dialog">
+	<div id="mockCreated" class="modal fade" data-backdrop="static" tabindex="-1" role="dialog">
 	  <div class="modal-dialog">
 	    <div class="modal-content">
 	      <div class="modal-header">
@@ -87,7 +95,14 @@
 	      </div>
 	      <div class="modal-body">
 	      	<h4>You can access it at:</h4>
-	        <div id="newMockURL" class="well"></div>
+	        <form class="form-inline">
+	          <div class="form-group">
+	            <div class="input-group">
+	              <input id="newMockURL" type="text" class="form-control">
+	              <div id="copy" class="input-group-addon" data-clipboard-target="#newMockURL" data-toggle="tooltip" data-trigger="mannual" data-container="body" data-placement="bottom">Copy</div>
+	            </div>
+	          </div>
+	        </form>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -105,6 +120,26 @@
 	    editor.getSession().setMode("ace/mode/json");
 	    editor.getSession().setTabSize(4);
 
+	    var tooltipTimer = null;
+		new Clipboard('#copy')
+			.on('success', function () {
+				clearTimeout(tooltipTimer);
+				$('#copy')
+					.data('title', 'Copied!')
+					.tooltip('show');
+				tooltipTimer = setTimeout(function () {
+					$('#copy').tooltip('hide');
+				}, 1000);
+			})
+			.on('error', function () {
+				clearTimeout(tooltipTimer);
+				$('#copy')
+					.data('title', 'Legacy browser, use Ctrl-C to copy')
+					.tooltip('show');
+				tooltipTimer = setTimeout(function () {
+					$('#copy').tooltip('hide');
+				}, 1000);
+			});
 
 	    // Submit to server
 	    $('#create').on('click', function (event) {
@@ -131,9 +166,13 @@
 	    		delay: $('#inputResponseDelay').val(),
 	    		content: editor.getValue()
 	    	}, 'json').then(function (response) {
-	    		$('#newMockURL').html(window.location.href.replace(/\/$/, '') + response.path);
+	    		$('#newMockURL').val(window.location.href.replace(/\/$/, '') + response.path);
 	    		$('#mockCreated').modal('show');
 	    	});
+	    });
+
+	    $('#newMockURL').on('click', function () {
+	    	$(this).select();
 	    });
 
 	    // Format JSON code
