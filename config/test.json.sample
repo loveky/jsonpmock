@@ -2,8 +2,8 @@
 	"redis" : {
 		"host": "127.0.0.1",
 		"port": 6379,
-		"password": "auth",
 		"keyPrefix": "jsonp-mock-test:"
 	},
-	"port": 3001
+	"port": 3001,
+	"cacheTemplate": true
 }

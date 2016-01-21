@@ -11,7 +11,7 @@ const router = require('./router');
 render(app, {
 	root: path.join(__dirname, 'views'),
 	layout: false,
-	cache: false
+	cache: config.get('cacheTemplate')
 });
 
 app.use(charset());
