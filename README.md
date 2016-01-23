@@ -1,4 +1,6 @@
 # jsonpmock
+[![Build Status](https://travis-ci.org/loveky/jsonpmock.svg?branch=master)](https://travis-ci.org/loveky/jsonpmock)
+
 mock up your jsonp API with ease 
 
 developed & tested under Node version 5.4.1
