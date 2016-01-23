@@ -20,7 +20,7 @@ function toNumber(string, min, max) {
 	string += '';
 	if (string.match(/^\s*\d+\s*$/)) {
 		var value = parseInt(string, 10);
-		
+
 		if (value < min) {
 			value = min;
 		}

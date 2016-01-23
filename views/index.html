@@ -38,6 +38,12 @@
 		#copy {
 			cursor: pointer;
 		}
+		#open {
+			border-left: none;
+		}
+		#open a,#open a:hover {
+			text-decoration: none;
+		}
 	</style>
 </head>
 <body>
@@ -99,6 +105,9 @@
 	          <div class="form-group">
 	            <div class="input-group">
 	              <input id="newMockURL" type="text" class="form-control">
+	              <div id="open" class="input-group-addon">
+	              	<a target="blank" href="/">Open</a>
+	              </div>
 	              <div id="copy" class="input-group-addon" data-clipboard-target="#newMockURL" data-toggle="tooltip" data-trigger="mannual" data-container="body" data-placement="bottom">Copy</div>
 	            </div>
 	          </div>
@@ -116,7 +125,7 @@
 		// Init ACE editor
 		var editor = ace.edit("json");
 	    editor.setTheme("ace/theme/monokai")
-	    editor.setFontSize(14);		
+	    editor.setFontSize(14);
 	    editor.getSession().setMode("ace/mode/json");
 	    editor.getSession().setTabSize(4);
 
@@ -160,13 +169,15 @@
 	    		alert('Oops, seems you have syntax error in your JSON response!');
 	    		return;
 	    	}
-
 	    	$.post('/', {
 	    		charset: $('#inputCharset').val(),
 	    		delay: $('#inputResponseDelay').val(),
 	    		content: editor.getValue()
 	    	}, 'json').then(function (response) {
-	    		$('#newMockURL').val(window.location.href.replace(/\/$/, '') + response.path);
+	    		var url = window.location.href.replace(/\/$/, '') + response.path
+	    		$('#newMockURL').val(url);
+	    		$('#open a').attr('href', url + '?callback=handler');
+
 	    		$('#mockCreated').modal('show');
 	    	});
 	    });
@@ -188,7 +199,7 @@
 	    $('#inputResponseDelay').on('blur', function () {
 	    	var $this = $(this);
 	    	var value = $this.val();
-	    	if (value !== '') {    		
+	    	if (value !== '') {
 		    	value = toNumber(value, 0, 10000);
 		    	$this.val(value);
 	    	}
@@ -198,7 +209,7 @@
 	    function toNumber(string, min, max) {
 	    	if (string.match(/^\s*\d+\s*$/)) {
 	    		var value = parseInt(string, 10);
-	    		
+
 	    		if (value < min) {
 	    			value = min;
 	    		}
