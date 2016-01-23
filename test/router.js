@@ -29,6 +29,23 @@ describe('Router:', function () {
 		cleanup(done);
 	});
 
+	describe('GET /', function () {
+		it('should show the summary information on page', function (done) {
+			co(function * () {
+				yield redis.set('totalMockCreated', 333);
+				yield redis.set('totalMockRequests', 666);
+				request
+					.get('/')
+					.expect(200)
+					.end(function (err, res) {
+						expect(res.text).to.match(/333 jsonp mock created/);
+						expect(res.text).to.match(/666 mock request served/);
+						done();
+					});
+			});			
+		});
+	});
+
 	describe('POST /', function () {
 		let mockConfig = {
 			charset: 'utf-8',
@@ -125,6 +142,13 @@ describe('Router:', function () {
 				yield redis.hmset('jsonmock', 'abcslow', JSON.stringify(mockConfigWithDelay));
 				done();
 			});
+		});
+
+		it('should response 404 if mockConfig for provided ID', function (done) {
+			request
+				.get('/donotexist?callback=abc')
+				.expect(404)
+				.end(done);
 		});
 
 		it('should response with Content-Type "application/javascript"', function (done) {

@@ -4,37 +4,10 @@ const router = require('koa-router')();
 const md5 = require('md5');
 const koaBody = require('koa-body')();
 const redis = require('./redis');
+const helper = require('./helper');
 
-
-function delay (timeInMS) {
-	timeInMS = Number(timeInMS);
-
-	return new Promise (function (resolve, reject) {
-		setTimeout(function () {
-			resolve();
-		}, timeInMS);
-	});
-}
-
-function toNumber(string, min, max) {
-	string += '';
-	if (string.match(/^\s*\d+\s*$/)) {
-		var value = parseInt(string, 10);
-
-		if (value < min) {
-			value = min;
-		}
-
-		if (value > max) {
-			value = max;
-		}
-
-		return value;
-	}
-	else {
-		return min;
-	}
-}
+const delay = helper.delay;
+const toNumber = helper.toNumber;
 
 router
 	.get('/', function * (next) {
