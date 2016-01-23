@@ -20,3 +20,4 @@ npm start
 ```shell
 npm test
 ```
+Then, you can view the coverage report in `coverage/lcov-report/index.html` file.
