@@ -1,5 +1,7 @@
 language: node_js
 node_js:
   - "5.4.1"
+before_script:
+  cp config/test.json.sample config/test.json
 services:
   - redis-server
