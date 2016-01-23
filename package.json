@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node start.js",
-    "test": "node ./node_modules/mocha/bin/mocha"
+    "test": "node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec"
   },
   "keywords": [
     "jsonp",
@@ -24,8 +24,11 @@
     "md5": "^2.0.0"
   },
   "devDependencies": {
+    "coveralls": "^2.11.6",
     "expect.js": "^0.3.1",
+    "istanbul": "^0.4.2",
     "mocha": "^2.3.4",
+    "mocha-lcov-reporter": "^1.0.0",
     "supertest": "^1.1.0"
   }
 }
