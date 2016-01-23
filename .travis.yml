@@ -5,3 +5,5 @@ before_script:
   cp config/test.json.sample config/test.json
 services:
   - redis-server
+env
+  - NODE_ENV=test
